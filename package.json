@@ -1,6 +1,6 @@
 {
 	"name": "@payloadcms-toolbox/lexical-color-picker",
-	"version": "0.0.6",
+	"version": "0.1.0",
 	"description": "A text color picker feature for the Payload CMS Lexical editor.",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
