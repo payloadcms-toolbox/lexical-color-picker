@@ -1,4 +1,14 @@
 import {
+	FloatingPortal,
+	flip,
+	offset,
+	shift,
+	useClick,
+	useDismiss,
+	useFloating,
+	useInteractions,
+} from "@floating-ui/react";
+import {
 	$getSelection,
 	$isRangeSelection,
 	COMMAND_PRIORITY_LOW,
@@ -6,17 +16,7 @@ import {
 	SELECTION_CHANGE_COMMAND,
 } from "@payloadcms/richtext-lexical/lexical";
 import { useCallback, useEffect, useState } from "react";
-import { TwitterPicker, type ColorResult } from "react-color";
-import {
-	useFloating,
-	useClick,
-	useDismiss,
-	useInteractions,
-	FloatingPortal,
-	offset,
-	flip,
-	shift,
-} from "@floating-ui/react";
+import { type ColorResult, TwitterPicker } from "react-color";
 import {
 	applyTextColorToNodes,
 	getFirstTextNodeColor,

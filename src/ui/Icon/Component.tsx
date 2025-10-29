@@ -9,9 +9,9 @@ export const TextColorIcon = () => (
 		strokeWidth="2"
 		strokeLinecap="round"
 		strokeLinejoin="round"
-    aria-label="Text color"
+		aria-label="Text color"
 	>
-    <title>Text color</title>
+		<title>Text color</title>
 		<path d="M4 20h16" />
 		<path d="m6 16 6-12 6 12" />
 		<path d="M8 12h8" />
