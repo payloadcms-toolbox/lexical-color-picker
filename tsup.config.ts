@@ -1,11 +1,32 @@
-import { defineConfig } from "tsup";
+import { vanillaExtractPlugin } from "@vanilla-extract/esbuild-plugin";
+import { defineConfig, type Options } from "tsup";
 
-export default defineConfig({
-  entry: ["src/index.ts", "src/feature.client.tsx"],
-  format: ["cjs", "esm"],
+const commonConfig: Partial<Options> = {
+  format: ["esm"],
   dts: true,
+  sourcemap: false,
   minify: true,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-});
+  external: ["react", "react-dom", "react/jsx-runtime", /^@payloadcms\/.*/],
+  esbuildPlugins: [vanillaExtractPlugin()],
+  injectStyle: false,
+};
+
+export default defineConfig([
+  {
+    ...commonConfig,
+    entry: {
+      index: "src/index.ts",
+    },
+    clean: true,
+  },
+  {
+    ...commonConfig,
+    entry: {
+      "feature.client": "src/feature.client.tsx",
+    },
+    clean: false,
+    banner: {
+      js: '"use client";',
+    },
+  },
+]);
