@@ -6,11 +6,23 @@ import {
 	SELECTION_CHANGE_COMMAND,
 } from "@payloadcms/richtext-lexical/lexical";
 import { useCallback, useEffect, useState } from "react";
+import { TwitterPicker, type ColorResult } from "react-color";
+import {
+	useFloating,
+	useClick,
+	useDismiss,
+	useInteractions,
+	FloatingPortal,
+	offset,
+	flip,
+	shift,
+} from "@floating-ui/react";
 import {
 	applyTextColorToNodes,
 	getFirstTextNodeColor,
 } from "../../utils/textColorUtils";
 import { TextColorIcon } from "../Icon";
+import * as styles from "./styles.css";
 
 type Props = {
 	editor: LexicalEditor;
@@ -20,6 +32,22 @@ type Props = {
 
 export const Button = ({ editor, predefinedColors, defaultColor }: Props) => {
 	const [currentColor, setCurrentColor] = useState<string>(defaultColor);
+	const [isOpen, setIsOpen] = useState(false);
+
+	const { refs, floatingStyles, context } = useFloating({
+		open: isOpen,
+		onOpenChange: setIsOpen,
+		middleware: [offset(8), flip(), shift({ padding: 8 })],
+		placement: "bottom-start",
+	});
+
+	const click = useClick(context);
+	const dismiss = useDismiss(context);
+
+	const { getReferenceProps, getFloatingProps } = useInteractions([
+		click,
+		dismiss,
+	]);
 
 	useEffect(() => {
 		const updateCurrentColor = () => {
@@ -72,50 +100,48 @@ export const Button = ({ editor, predefinedColors, defaultColor }: Props) => {
 		[editor],
 	);
 
-	const handleColorInputChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newColor = e.target.value;
+	const handleColorChange = useCallback(
+		(color: ColorResult) => {
+			const newColor = color.hex;
 			setCurrentColor(newColor);
 			changeTextColor(newColor);
 		},
 		[changeTextColor],
 	);
 
-	const handlePredefinedColorClick = useCallback(
-		(color: string) => {
-			setCurrentColor(color);
-			changeTextColor(color);
-		},
-		[changeTextColor],
-	);
-
 	return (
-		<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-			<TextColorIcon />
-			<input
-				type="color"
-				value={currentColor}
-				onChange={handleColorInputChange}
+		<div className={styles.buttonWrapper}>
+			<button
+				type="button"
+				ref={refs.setReference}
+				className={styles.colorButton}
 				aria-label="Pick text color"
-				style={{ width: "40px", height: "30px", cursor: "pointer" }}
-			/>
-			{predefinedColors.map((color) => (
-				<button
-					key={color}
-					type="button"
-					onClick={() => handlePredefinedColorClick(color)}
-					aria-label={`Set text color to ${color}`}
-					style={{
-						width: "30px",
-						height: "30px",
-						backgroundColor: color,
-						border: currentColor === color ? "2px solid #000" : "1px solid #ccc",
-						borderRadius: "4px",
-						cursor: "pointer",
-						padding: 0,
-					}}
+				{...getReferenceProps()}
+			>
+				<TextColorIcon />
+				<span
+					className={styles.colorIndicator}
+					style={{ backgroundColor: currentColor }}
 				/>
-			))}
+			</button>
+
+			{isOpen && (
+				<FloatingPortal>
+					<div
+						ref={refs.setFloating}
+						style={floatingStyles}
+						className={styles.popover}
+						{...getFloatingProps()}
+					>
+						<TwitterPicker
+							color={currentColor}
+							onChange={handleColorChange}
+							colors={predefinedColors}
+							triangle="hide"
+						/>
+					</div>
+				</FloatingPortal>
+			)}
 		</div>
 	);
 };
