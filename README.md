@@ -60,13 +60,13 @@ This plugin was created because the built-in Lexical features in Payload CMS don
 
 ```bash
 npm install @payloadcms-toolbox/lexical-color-picker
-```
 
-```bash
+or
+
 yarn add @payloadcms-toolbox/lexical-color-picker
-```
 
-```bash
+or
+
 pnpm add @payloadcms-toolbox/lexical-color-picker
 ```
 
