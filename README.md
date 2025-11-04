@@ -45,7 +45,6 @@ This plugin was created because the built-in Lexical features in Payload CMS don
 
 - 🎨 **Visual Color Picker**: Intuitive color picker in the Lexical toolbar
 - 🔧 **Fully Customizable**: Define your own predefined color palettes
-- 📝 **HTML/Markdown Support**: Automatic conversion to and from HTML/Markdown
 - 👁️ **Visual Feedback**: Color indicator shows current text color
 - 🔒 **Type-Safe**: Full TypeScript definitions included
 - ♿ **Accessible**: ARIA-compliant UI components
@@ -92,6 +91,8 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { TextColorFeature } from '@payloadcms-toolbox/lexical-color-picker'
 import { buildConfig } from 'payload'
 
+import '@payloadcms-toolbox/lexical-color-picker/style.css'
+
 export default buildConfig({
   // ... other config
   editor: lexicalEditor({
@@ -121,6 +122,8 @@ Add the text color feature to **specific** rich text fields:
 ```ts
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { TextColorFeature } from '@payloadcms-toolbox/lexical-color-picker'
+
+import '@payloadcms-toolbox/lexical-color-picker/style.css'
 
 export const Pages = {
   slug: 'pages',

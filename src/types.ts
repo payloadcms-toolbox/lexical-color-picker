@@ -1,7 +1,7 @@
 /**
  * Props for configuring the TextColor feature on the server side
  */
-export interface TextColorFeatureProps {
+export interface ColorFeatureProps {
 	/**
 	 * Array of predefined colors for quick selection
 	 * Must be valid CSS color values (hex, rgb, rgba, named colors)
@@ -20,7 +20,7 @@ export interface TextColorFeatureProps {
 /**
  * Props passed to the client feature (validated and with defaults applied)
  */
-export interface TextColorClientFeatureProps {
+export interface ColorClientFeatureProps {
 	/**
 	 * Array of predefined colors for quick selection
 	 */

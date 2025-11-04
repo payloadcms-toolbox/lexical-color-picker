@@ -5,6 +5,8 @@ import {
 
 import { TEXT_COLOR_REGEX } from "./constants";
 
+const BACKGROUND_COLOR_REGEX = /background-color:\s*([^;]+)/i;
+
 /**
  * Extracts color value from a CSS style string
  * @param style - CSS style string
@@ -71,9 +73,50 @@ export const getFirstTextNodeColor = (
 };
 
 /**
- * Applies text color to all text nodes in the array
+ * Extracts background-color value from a CSS style string
+ * @param style - CSS style string
+ * @param defaultColor - Default color to return if not found
+ * @returns Background color value or default color
+ */
+export const extractBackgroundColor = (
+	style: string,
+	defaultColor: string,
+): string => {
+	const match = style.match(BACKGROUND_COLOR_REGEX);
+	return match ? match[1].trim() : defaultColor;
+};
+
+/**
+ * Removes background-color property from a CSS style string
+ * @param style - CSS style string
+ * @returns Style string without background-color property
+ */
+export const removeBackgroundColorFromStyle = (style: string): string => {
+	return style.replace(/background-color:\s*[^;]+;?\s*/g, "").trim();
+};
+
+/**
+ * Creates a new style string with the specified background color
+ * @param currentStyle - Current CSS style string
+ * @param color - Background color to apply
+ * @returns New style string with background-color property
+ */
+export const createStyleWithBackgroundColor = (
+	currentStyle: string,
+	color: string,
+): string => {
+	const styleWithoutBgColor = removeBackgroundColorFromStyle(currentStyle);
+
+	return styleWithoutBgColor
+		? `${styleWithoutBgColor}; background-color: ${color}`
+		: `background-color: ${color}`;
+};
+
+/**
+ * Applies text color to all text nodes in the array with toggle functionality
+ * If the same color is already applied, it removes the color property
  * @param nodes - Array of Lexical nodes
- * @param color - Color to apply
+ * @param color - Color to apply or toggle off
  */
 export const applyTextColorToNodes = (
 	nodes: LexicalNode[],
@@ -81,8 +124,46 @@ export const applyTextColorToNodes = (
 ): void => {
 	nodes.forEach((node) => {
 		if ($isTextNode(node)) {
-			const newStyle = createStyleWithTextColor(node.getStyle(), color);
-			node.setStyle(newStyle);
+			const currentStyle = node.getStyle();
+			const currentColor = extractTextColor(currentStyle, "");
+
+			// If the same color is already applied, remove the color property
+			if (currentColor.toLowerCase() === color.toLowerCase()) {
+				const newStyle = removeTextColorFromStyle(currentStyle);
+				node.setStyle(newStyle);
+			} else {
+				// Otherwise, apply the new color
+				const newStyle = createStyleWithTextColor(currentStyle, color);
+				node.setStyle(newStyle);
+			}
+		}
+	});
+};
+
+/**
+ * Applies background color to all text nodes in the array with toggle functionality
+ * If the same color is already applied, it removes the background-color property
+ * @param nodes - Array of Lexical nodes
+ * @param color - Background color to apply or toggle off
+ */
+export const applyBackgroundColorToNodes = (
+	nodes: LexicalNode[],
+	color: string,
+): void => {
+	nodes.forEach((node) => {
+		if ($isTextNode(node)) {
+			const currentStyle = node.getStyle();
+			const currentColor = extractBackgroundColor(currentStyle, "");
+
+			// If the same color is already applied, remove the background-color property
+			if (currentColor.toLowerCase() === color.toLowerCase()) {
+				const newStyle = removeBackgroundColorFromStyle(currentStyle);
+				node.setStyle(newStyle);
+			} else {
+				// Otherwise, apply the new color
+				const newStyle = createStyleWithBackgroundColor(currentStyle, color);
+				node.setStyle(newStyle);
+			}
 		}
 	});
 };

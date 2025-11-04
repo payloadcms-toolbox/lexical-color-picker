@@ -8,6 +8,7 @@ import {
 	useFloating,
 	useInteractions,
 } from "@floating-ui/react";
+import type { LexicalNode } from "@payloadcms/richtext-lexical/lexical";
 import {
 	$getSelection,
 	$isRangeSelection,
@@ -17,20 +18,28 @@ import {
 } from "@payloadcms/richtext-lexical/lexical";
 import { useCallback, useEffect, useState } from "react";
 import { type ColorResult, TwitterPicker } from "react-color";
-import {
-	applyTextColorToNodes,
-	getFirstTextNodeColor,
-} from "../../utils/textColorUtils";
-import { TextColorIcon } from "../Icon";
+import { getFirstTextNodeColor } from "../../../utils/textColorUtils";
 import * as styles from "./styles.css";
 
 type Props = {
 	editor: LexicalEditor;
 	predefinedColors: string[];
 	defaultColor: string;
+	applyColorFn: (nodes: LexicalNode[], color: string) => void;
+	IconComponent: React.ComponentType;
+	ariaLabel: string;
+	cssProperty: string; // 'color' or 'background-color'
 };
 
-export const Button = ({ editor, predefinedColors, defaultColor }: Props) => {
+export const ColorPickerButton = ({
+	editor,
+	predefinedColors,
+	defaultColor,
+	applyColorFn,
+	IconComponent,
+	ariaLabel,
+	cssProperty,
+}: Props) => {
 	const [currentColor, setCurrentColor] = useState<string>(defaultColor);
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -84,29 +93,29 @@ export const Button = ({ editor, predefinedColors, defaultColor }: Props) => {
 			unregisterCommand();
 			unregisterUpdateListener();
 		};
-	}, [editor, defaultColor]);
+	}, [editor, defaultColor, cssProperty]);
 
-	const changeTextColor = useCallback(
+	const changeColor = useCallback(
 		(color: string) => {
 			editor.update(() => {
 				const selection = $getSelection();
 
 				if ($isRangeSelection(selection)) {
 					const nodes = selection.extract();
-					applyTextColorToNodes(nodes, color);
+					applyColorFn(nodes, color);
 				}
 			});
 		},
-		[editor],
+		[editor, applyColorFn],
 	);
 
 	const handleColorChange = useCallback(
 		(color: ColorResult) => {
 			const newColor = color.hex;
 			setCurrentColor(newColor);
-			changeTextColor(newColor);
+			changeColor(newColor);
 		},
-		[changeTextColor],
+		[changeColor],
 	);
 
 	return (
@@ -115,10 +124,10 @@ export const Button = ({ editor, predefinedColors, defaultColor }: Props) => {
 				type="button"
 				ref={refs.setReference}
 				className={styles.colorButton}
-				aria-label="Pick text color"
+				aria-label={ariaLabel}
 				{...getReferenceProps()}
 			>
-				<TextColorIcon />
+				<IconComponent />
 				<span
 					className={styles.colorIndicator}
 					style={{ backgroundColor: currentColor }}
