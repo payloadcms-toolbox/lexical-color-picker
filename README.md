@@ -474,7 +474,7 @@ No, this feature only affects new text color selections. Existing colored text w
 
 ## License
 
-MIT © 2024 Evgenii Troinov
+MIT © 2025 Evgenii Troinov
 
 See [LICENSE](./LICENSE) file for details.
 
