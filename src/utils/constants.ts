@@ -23,5 +23,6 @@ export const DEFAULT_TEXT_COLOR = "#000000";
 
 /**
  * Regex pattern to extract color from CSS style string
+ * Uses word boundary to match only 'color' property, not 'background-color' or other properties
  */
-export const TEXT_COLOR_REGEX = /color:\s*([^;]+)/;
+export const TEXT_COLOR_REGEX = /(?:^|;)\s*color\s*:\s*([^;]+)/i;

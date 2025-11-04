@@ -67,6 +67,7 @@ export const ColorPickerButton = ({
 				const selectionStyle = selection.style;
 				const color = getFirstTextNodeColor(
 					nodes,
+					cssProperty,
 					defaultColor,
 					selectionStyle,
 				);

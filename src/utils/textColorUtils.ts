@@ -23,11 +23,12 @@ export const extractTextColor = (
 
 /**
  * Removes color property from a CSS style string
+ * Uses word boundary to remove only 'color' property, not 'background-color' or other properties
  * @param style - CSS style string
  * @returns Style string without color property
  */
 export const removeTextColorFromStyle = (style: string): string => {
-	return style.replace(/color:\s*[^;]+;?\s*/g, "").trim();
+	return style.replace(/(?:^|;)\s*color\s*:\s*[^;]+;?\s*/gi, "").trim();
 };
 
 /**
@@ -48,25 +49,47 @@ export const createStyleWithTextColor = (
 };
 
 /**
- * Gets the text color from the first text node in the array
+ * Extracts color value for a specific CSS property from style string
+ * @param style - CSS style string
+ * @param property - CSS property name ('color' or 'background-color')
+ * @param defaultColor - Default color to return if not found
+ * @returns Color value or default color
+ */
+export const extractColorByProperty = (
+	style: string,
+	property: string,
+	defaultColor: string,
+): string => {
+	if (property === "color") {
+		return extractTextColor(style, defaultColor);
+	} else if (property === "background-color") {
+		return extractBackgroundColor(style, defaultColor);
+	}
+	return defaultColor;
+};
+
+/**
+ * Gets the color from the first text node in the array for a specific CSS property
  * @param nodes - Array of Lexical nodes
+ * @param cssProperty - CSS property name ('color' or 'background-color')
  * @param defaultColor - Default color to return if not found
  * @param selectionStyle - Optional selection style to check when no text nodes found
  * @returns Color value or default color
  */
 export const getFirstTextNodeColor = (
 	nodes: LexicalNode[],
+	cssProperty: string,
 	defaultColor: string,
 	selectionStyle?: string,
 ): string => {
 	for (const node of nodes) {
 		if ($isTextNode(node)) {
-			return extractTextColor(node.getStyle(), defaultColor);
+			return extractColorByProperty(node.getStyle(), cssProperty, defaultColor);
 		}
 	}
 
 	if (selectionStyle) {
-		return extractTextColor(selectionStyle, defaultColor);
+		return extractColorByProperty(selectionStyle, cssProperty, defaultColor);
 	}
 
 	return defaultColor;
