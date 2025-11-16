@@ -1,6 +1,6 @@
 {
 	"name": "@payloadcms-toolbox/lexical-color-picker",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "A text color picker feature for the Payload CMS Lexical editor.",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
@@ -27,7 +27,6 @@
 	},
 	"author": {
 		"name": "Evgenii Troinov",
-		"url": "https://example.com"
 	},
 	"scripts": {
 		"build": "tsup",
@@ -49,8 +48,7 @@
 		"typescript": "^5.9.3"
 	},
 	"files": [
-		"dist",
-		"src"
+		"dist"
 	],
 	"publishConfig": {
 		"access": "public"

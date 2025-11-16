@@ -91,7 +91,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { TextColorFeature } from '@payloadcms-toolbox/lexical-color-picker'
 import { buildConfig } from 'payload'
 
-import '@payloadcms-toolbox/lexical-color-picker/style.css'
+import '@payloadcms-toolbox/lexical-color-picker/style.css' // Important
 
 export default buildConfig({
   // ... other config
@@ -108,7 +108,8 @@ export default buildConfig({
           '#ffff00', // Yellow
         ],
         defaultColor: '#000000'
-      })
+      }), // Before FixedToolbarFeature()
+      FixedToolbarFeature(),
     ]
   }),
   // ... rest of config
