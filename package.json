@@ -26,7 +26,7 @@
 		"url": "git+https://github.com/payloadcms-toolbox/lexical-color-picker.git"
 	},
 	"author": {
-		"name": "Evgenii Troinov",
+		"name": "Evgenii Troinov"
 	},
 	"scripts": {
 		"build": "tsup",
