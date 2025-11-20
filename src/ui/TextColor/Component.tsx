@@ -1,4 +1,5 @@
 import type { LexicalEditor } from '@payloadcms/richtext-lexical/lexical';
+import { applyTextGradientToNodes } from '../../utils/gradientUtils';
 import { applyTextColorToNodes } from '../../utils/textColorUtils';
 import { ColorPickerButton } from '../shared/ColorPickerButton';
 
@@ -6,12 +7,14 @@ type Props = {
 	editor: LexicalEditor;
 	predefinedColors: string[];
 	defaultColor: string;
+	gradients?: string[];
 };
 
 export const TextColorButton = ({
 	editor,
 	predefinedColors,
 	defaultColor,
+	gradients,
 }: Props) => (
 	<ColorPickerButton
 		editor={editor}
@@ -20,6 +23,8 @@ export const TextColorButton = ({
 		applyColorFn={applyTextColorToNodes}
 		ariaLabel="Pick text color"
 		cssProperty="color"
+		gradients={gradients}
+		applyGradientFn={applyTextGradientToNodes}
 	>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

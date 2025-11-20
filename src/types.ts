@@ -15,6 +15,13 @@ export interface ColorFeatureProps {
 	 * @default '#000000'
 	 */
 	defaultColor?: string;
+
+	/**
+	 * Array of predefined gradients for quick selection
+	 * Must be valid CSS gradient values (linear-gradient, radial-gradient, conic-gradient)
+	 * @default undefined (gradients disabled)
+	 */
+	gradients?: string[];
 }
 
 /**
@@ -30,4 +37,9 @@ export interface ColorClientFeatureProps {
 	 * Default text color to apply
 	 */
 	defaultColor: string;
+
+	/**
+	 * Array of predefined gradients for quick selection
+	 */
+	gradients?: string[];
 }

@@ -4,6 +4,7 @@ import {
 } from '@payloadcms/richtext-lexical/lexical';
 
 import { TEXT_COLOR_REGEX } from './constants';
+import { removeGradientPropertiesFromStyle } from './gradientUtils';
 
 const BACKGROUND_COLOR_REGEX = /background-color:\s*([^;]+)/i;
 
@@ -33,6 +34,7 @@ export const removeTextColorFromStyle = (style: string): string => {
 
 /**
  * Creates a new style string with the specified text color
+ * Also removes any gradient properties to prevent conflicts
  * @param currentStyle - Current CSS style string
  * @param color - Color to apply
  * @returns New style string with color property
@@ -41,7 +43,10 @@ export const createStyleWithTextColor = (
 	currentStyle: string,
 	color: string,
 ): string => {
-	const styleWithoutColor = removeTextColorFromStyle(currentStyle);
+	let styleWithoutColor = removeTextColorFromStyle(currentStyle);
+
+	// Remove gradient properties when applying solid color
+	styleWithoutColor = removeGradientPropertiesFromStyle(styleWithoutColor);
 
 	return styleWithoutColor
 		? `${styleWithoutColor}; color: ${color}`
@@ -120,6 +125,7 @@ export const removeBackgroundColorFromStyle = (style: string): string => {
 
 /**
  * Creates a new style string with the specified background color
+ * Also removes any gradient properties to prevent conflicts
  * @param currentStyle - Current CSS style string
  * @param color - Background color to apply
  * @returns New style string with background-color property
@@ -128,7 +134,12 @@ export const createStyleWithBackgroundColor = (
 	currentStyle: string,
 	color: string,
 ): string => {
-	const styleWithoutBgColor = removeBackgroundColorFromStyle(currentStyle);
+	let styleWithoutBgColor = removeBackgroundColorFromStyle(currentStyle);
+
+	// Remove gradient properties when applying solid background color
+	styleWithoutBgColor = styleWithoutBgColor
+		.replace(/background-image:\s*[^;]+;?\s*/gi, '')
+		.trim();
 
 	return styleWithoutBgColor
 		? `${styleWithoutBgColor}; background-color: ${color}`

@@ -16,6 +16,7 @@ export const createColorServerFeature = (
 		feature: ({ props }) => {
 			const predefinedColors = props?.predefinedColors || DEFAULT_TEXT_COLORS;
 			const defaultColor = props?.defaultColor || DEFAULT_TEXT_COLOR;
+			const gradients = props?.gradients;
 
 			if (predefinedColors.length === 0) {
 				console.warn(
@@ -27,6 +28,7 @@ export const createColorServerFeature = (
 					clientFeatureProps: {
 						predefinedColors: DEFAULT_TEXT_COLORS,
 						defaultColor: DEFAULT_TEXT_COLOR,
+						gradients,
 					},
 				};
 			}
@@ -36,6 +38,7 @@ export const createColorServerFeature = (
 				clientFeatureProps: {
 					predefinedColors,
 					defaultColor,
+					gradients,
 				},
 			};
 		},

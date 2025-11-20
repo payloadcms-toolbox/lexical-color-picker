@@ -13,6 +13,7 @@ type ColorFeatureConfig = {
 		editor: LexicalEditor;
 		predefinedColors: string[];
 		defaultColor: string;
+		gradients?: string[];
 	}>;
 };
 
@@ -22,7 +23,7 @@ export const createColorFeature = ({
 	ButtonComponent,
 }: ColorFeatureConfig) =>
 	createClientFeature<ColorClientFeatureProps>(({ props }) => {
-		const { predefinedColors, defaultColor } = props;
+		const { predefinedColors, defaultColor, gradients } = props;
 
 		const ButtonWithProps = (buttonProps: {
 			editor: LexicalEditor;
@@ -34,6 +35,7 @@ export const createColorFeature = ({
 				{...buttonProps}
 				predefinedColors={predefinedColors}
 				defaultColor={defaultColor}
+				gradients={gradients}
 			/>
 		);
 

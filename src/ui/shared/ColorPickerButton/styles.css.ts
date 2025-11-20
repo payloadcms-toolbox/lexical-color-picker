@@ -82,6 +82,10 @@ export const popover = style({
 	},
 });
 
+globalStyle(`.twitter-picker`, {
+	boxShadow: 'none !important',
+});
+
 globalStyle(`html[data-theme="dark"] .twitter-picker`, {
 	border: '1px solid #3c3c3c',
 	backgroundColor: '#222222 !important',
@@ -92,3 +96,62 @@ export const overlay = style({
 	inset: 0,
 	zIndex: 999,
 });
+
+export const pickerContainer = style({
+	padding: '12px',
+	backgroundColor: '#fff',
+	borderRadius: '4px',
+	boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+	minWidth: '276px',
+
+	'@media': {
+		'(prefers-color-scheme: dark)': {
+			backgroundColor: '#222222',
+			border: '1px solid #3c3c3c',
+			boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
+		},
+	},
+
+	selectors: {
+		'html[data-theme="dark"] &': {
+			backgroundColor: '#222222',
+			border: '1px solid #3c3c3c',
+			boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
+		},
+	},
+});
+
+export const gradientGrid = style({
+	display: 'grid',
+	gridTemplateColumns: 'repeat(6, 30px)',
+	gap: '8px',
+	padding: '4px',
+});
+
+export const gradientItem = style({
+	width: '100%',
+	aspectRatio: '1',
+	border: '2px solid transparent',
+	borderRadius: '4px',
+	cursor: 'pointer',
+	transition: 'all 0.2s ease',
+	padding: 0,
+	outline: 'none',
+
+	':hover': {
+		transform: 'scale(1.1)',
+		borderColor: '#3b82f6',
+	},
+
+	':focus-visible': {
+		boxShadow: '0 0 0 2px #3b82f6',
+	},
+});
+
+export const gradientItemActive = style([
+	gradientItem,
+	{
+		borderColor: '#3b82f6',
+		boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.3)',
+	},
+]);
