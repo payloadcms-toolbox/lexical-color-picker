@@ -44,8 +44,10 @@ This plugin was created because the built-in Lexical features in Payload CMS don
 ## Features
 
 - 🎨 **Visual Color Picker**: Intuitive color picker in the Lexical toolbar
-- 🔧 **Fully Customizable**: Define your own predefined color palettes
-- 👁️ **Visual Feedback**: Color indicator shows current text color
+- 🌈 **Gradient Support**: Apply beautiful gradients to text and backgrounds with a simple toggle
+- 🔧 **Fully Customizable**: Define your own predefined color palettes and gradient presets
+- 👁️ **Visual Feedback**: Color indicator shows current text color or gradient
+- 🔄 **Dual Mode Picker**: Switch between solid colors and gradients with a segmented control
 - 🔒 **Type-Safe**: Full TypeScript definitions included
 - ♿ **Accessible**: ARIA-compliant UI components
 
@@ -88,7 +90,7 @@ Configure the text color feature globally for **all** rich text fields in your `
 
 ```ts
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { TextColorFeature } from '@payloadcms-toolbox/lexical-color-picker'
+import { TextColorFeature, DEFAULT_GRADIENTS } from '@payloadcms-toolbox/lexical-color-picker'
 import { buildConfig } from 'payload'
 
 import '@payloadcms-toolbox/lexical-color-picker/style.css' // Important
@@ -107,7 +109,8 @@ export default buildConfig({
           '#0000ff', // Blue
           '#ffff00', // Yellow
         ],
-        defaultColor: '#000000'
+        defaultColor: '#000000',
+        gradients: DEFAULT_GRADIENTS, // Optional: Enable gradient picker
       }), // Before FixedToolbarFeature()
       FixedToolbarFeature(),
     ]
@@ -122,7 +125,7 @@ Add the text color feature to **specific** rich text fields:
 
 ```ts
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { TextColorFeature } from '@payloadcms-toolbox/lexical-color-picker'
+import { TextColorFeature, BackgroundColorFeature, DEFAULT_GRADIENTS } from '@payloadcms-toolbox/lexical-color-picker'
 
 import '@payloadcms-toolbox/lexical-color-picker/style.css'
 
@@ -143,7 +146,16 @@ export const Pages = {
               '#00ff00', // Green
               '#0000ff', // Blue
             ],
-            defaultColor: '#000000'
+            defaultColor: '#000000',
+            gradients: [
+              'linear-gradient(90deg, #ff0000, #00ff00)',
+              'linear-gradient(90deg, #0000ff, #ff00ff)',
+            ],
+          }),
+          BackgroundColorFeature({
+            predefinedColors: ['#ffffff', '#f0f0f0'],
+            defaultColor: '#ffffff',
+            gradients: DEFAULT_GRADIENTS, // Use default gradient presets
           })
         ]
       })
@@ -154,18 +166,19 @@ export const Pages = {
 
 ## Configuration Options
 
-The `TextColorFeature` function accepts a configuration object with the following options:
+Both `TextColorFeature` and `BackgroundColorFeature` accept a configuration object with the following options:
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `predefinedColors` | `string[]` | `['#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#808080', '#ffa500', '#800080', '#a52a2a']` | Array of predefined colors for quick selection. Must be valid CSS color values (hex, rgb, rgba, named colors). |
 | `defaultColor` | `string` | `'#000000'` | Default text color to apply. Must be a valid CSS color value. |
+| `gradients` | `string[]` | `undefined` | Optional array of predefined gradients. When provided, a segmented control appears allowing users to switch between solid colors and gradients. Use `DEFAULT_GRADIENTS` for built-in presets or provide custom gradient values. |
 
 ## API Reference
 
 ### `TextColorFeature(options?)`
 
-Creates a text color picker feature for the Lexical editor.
+Creates a text color picker feature for the Lexical editor. Supports both solid colors and text gradients.
 
 **Parameters:**
 - `options` (optional): Configuration object
@@ -190,6 +203,24 @@ TextColorFeature({
   defaultColor: '#1a1a1a'
 })
 
+// With gradient support
+TextColorFeature({
+  predefinedColors: ['#000000', '#ffffff', '#ff0000'],
+  defaultColor: '#000000',
+  gradients: DEFAULT_GRADIENTS, // Use built-in gradients
+})
+
+// With custom gradients
+TextColorFeature({
+  predefinedColors: ['#000000', '#ffffff'],
+  defaultColor: '#000000',
+  gradients: [
+    'linear-gradient(90deg, #ff0000, #00ff00)',
+    'linear-gradient(45deg, #0000ff, #ff00ff)',
+    'radial-gradient(circle, #ffd700, #ff69b4)',
+  ],
+})
+
 // Using RGB/RGBA values
 TextColorFeature({
   predefinedColors: [
@@ -212,6 +243,61 @@ TextColorFeature({
   defaultColor: 'black'
 })
 ```
+
+### `BackgroundColorFeature(options?)`
+
+Creates a background color picker feature for the Lexical editor. Supports both solid colors and background gradients.
+
+**Parameters:**
+- `options` (optional): Configuration object
+
+**Returns:** Lexical feature that can be passed to the `features` array
+
+**Example:**
+```ts
+// Basic background colors
+BackgroundColorFeature({
+  predefinedColors: ['#ffffff', '#f0f0f0', '#e0e0e0'],
+  defaultColor: '#ffffff',
+})
+
+// With gradient backgrounds
+BackgroundColorFeature({
+  predefinedColors: ['#ffffff', '#f0f0f0'],
+  defaultColor: '#ffffff',
+  gradients: [
+    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'linear-gradient(to right, #ff9966, #ff5e62)',
+  ],
+})
+```
+
+### `DEFAULT_GRADIENTS`
+
+A built-in array of 12 beautiful gradient presets that you can use out of the box:
+
+```ts
+import { DEFAULT_GRADIENTS } from '@payloadcms-toolbox/lexical-color-picker'
+
+// Use in your configuration
+TextColorFeature({
+  gradients: DEFAULT_GRADIENTS,
+})
+```
+
+**Included gradients:**
+- Red to Orange
+- Orange to Yellow
+- Green to Cyan
+- Blue to Purple
+- Magenta to Pink
+- Black to Gray
+- Red to Blue
+- Gold to Hot Pink
+- Cyan to Magenta
+- Lime to Dodger Blue
+- Orange Red to Deep Pink
+- Royal Blue to Dark Turquoise
 
 ## Customization
 
@@ -271,6 +357,36 @@ TextColorFeature({
 })
 ```
 
+### Gradient Palettes
+
+Create stunning gradient presets for your content:
+
+```ts
+TextColorFeature({
+  predefinedColors: ['#000000', '#ffffff'],
+  defaultColor: '#000000',
+  gradients: [
+    // Warm gradients
+    'linear-gradient(90deg, #ff0000, #ff7f00)',
+    'linear-gradient(135deg, #ff9966, #ff5e62)',
+    'linear-gradient(to right, #f12711, #f5af19)',
+    
+    // Cool gradients
+    'linear-gradient(90deg, #00d2ff, #3a47d5)',
+    'linear-gradient(135deg, #667eea, #764ba2)',
+    'linear-gradient(to right, #56ccf2, #2f80ed)',
+    
+    // Colorful gradients
+    'linear-gradient(90deg, #f093fb, #f5576c)',
+    'linear-gradient(135deg, #4facfe, #00f2fe)',
+    
+    // Radial gradients
+    'radial-gradient(circle, #ffd700, #ff69b4)',
+    'radial-gradient(ellipse at top, #e0c3fc, #8ec5fc)',
+  ],
+})
+```
+
 ### Color Formats
 
 The plugin supports all valid CSS color formats:
@@ -287,6 +403,11 @@ The plugin supports all valid CSS color formats:
 
 // Named colors
 'white', 'black', 'red', 'blue', 'transparent'
+
+// Gradients (linear, radial, conic)
+'linear-gradient(90deg, #ff0000, #00ff00)'
+'radial-gradient(circle, #fff, #000)'
+'conic-gradient(from 0deg, red, yellow, green)'
 ```
 
 ## TypeScript
@@ -311,9 +432,17 @@ TextColorFeature(colorConfig)
 ### Available Types
 
 ```ts
-export interface TextColorFeatureProps {
+export interface ColorFeatureProps {
   predefinedColors?: string[]
   defaultColor?: string
+  gradients?: string[]
+}
+
+// Used for both TextColorFeature and BackgroundColorFeature
+export interface ColorClientFeatureProps {
+  predefinedColors: string[]
+  defaultColor: string
+  gradients?: string[]
 }
 ```
 
@@ -434,18 +563,28 @@ Currently, users can only select from the predefined colors. This is by design t
 
 ### Does this work with dark mode?
 
-Yes, the feature respects Payload CMS's theme settings automatically. The color picker popover adapts to your theme.
+Yes, the feature respects Payload CMS's theme settings automatically. The color picker popover and segmented control adapt to your theme.
 
 ### How is the color stored in the database?
 
-Colors are stored as inline CSS styles in the HTML content:
+Colors and gradients are stored as inline CSS styles in the HTML content:
 ```html
+<!-- Solid color -->
 <span style="color: #ff0000;">Colored text</span>
+
+<!-- Text gradient -->
+<span style="background-image: linear-gradient(90deg, #ff0000, #00ff00); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Gradient text</span>
+
+<!-- Background color -->
+<span style="background-color: #ffff00;">Highlighted text</span>
+
+<!-- Background gradient -->
+<span style="background-image: linear-gradient(135deg, #667eea, #764ba2);">Gradient background</span>
 ```
 
 ### Can I have different color palettes for different fields?
 
-Yes! Use per-field configuration to define different color palettes:
+Yes! Use per-field configuration to define different color palettes and gradients:
 
 ```ts
 {
@@ -454,7 +593,8 @@ Yes! Use per-field configuration to define different color palettes:
   editor: lexicalEditor({
     features: [
       TextColorFeature({
-        predefinedColors: ['#1a73e8', '#ffffff'], // Hero colors
+        predefinedColors: ['#1a73e8', '#ffffff'],
+        gradients: DEFAULT_GRADIENTS, // Hero with gradients
       })
     ]
   })
@@ -465,7 +605,8 @@ Yes! Use per-field configuration to define different color palettes:
   editor: lexicalEditor({
     features: [
       TextColorFeature({
-        predefinedColors: ['#333333', '#666666'], // Body colors
+        predefinedColors: ['#333333', '#666666'],
+        // No gradients for body text
       })
     ]
   })
@@ -474,7 +615,22 @@ Yes! Use per-field configuration to define different color palettes:
 
 ### Does this affect text already saved in the database?
 
-No, this feature only affects new text color selections. Existing colored text will maintain its current color values.
+No, this feature only affects new text color and gradient selections. Existing colored text will maintain its current color/gradient values.
+
+### Can I use gradients without solid colors?
+
+While you must provide `predefinedColors` (it's required), you can provide just a minimal set and focus on gradients:
+
+```ts
+TextColorFeature({
+  predefinedColors: ['#000000', '#ffffff'], // Minimal colors
+  gradients: DEFAULT_GRADIENTS, // Focus on gradients
+})
+```
+
+### Do gradients work on all browsers?
+
+Text gradients use `background-clip: text` which is supported in all modern browsers. For older browsers, text will fall back to the browser's default rendering. Background gradients work universally.
 
 ## License
 
