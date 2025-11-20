@@ -1,1 +1,0 @@
-export { BackgroundColorButton } from "./Component";

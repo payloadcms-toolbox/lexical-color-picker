@@ -1,10 +1,10 @@
 import {
 	createClientFeature,
 	toolbarFeatureButtonsGroupWithItems,
-} from "@payloadcms/richtext-lexical/client";
-import type { LexicalEditor } from "@payloadcms/richtext-lexical/lexical";
-import type { FC } from "react";
-import type { ColorClientFeatureProps } from "../types";
+} from '@payloadcms/richtext-lexical/client';
+import type { LexicalEditor } from '@payloadcms/richtext-lexical/lexical';
+import type { FC } from 'react';
+import type { ColorClientFeatureProps } from '../types';
 
 type ColorFeatureConfig = {
 	featureKey: string;
@@ -20,8 +20,8 @@ export const createColorFeature = ({
 	featureKey,
 	label,
 	ButtonComponent,
-}: ColorFeatureConfig) => {
-	return createClientFeature<ColorClientFeatureProps>(({ props }) => {
+}: ColorFeatureConfig) =>
+	createClientFeature<ColorClientFeatureProps>(({ props }) => {
 		const { predefinedColors, defaultColor } = props;
 
 		const ButtonWithProps = (buttonProps: {
@@ -52,7 +52,5 @@ export const createColorFeature = ({
 
 		return {
 			toolbarFixed: toolbarConfig,
-			toolbarInline: toolbarConfig,
 		};
 	});
-};

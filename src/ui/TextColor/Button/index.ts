@@ -1,1 +1,0 @@
-export { TextColorButton } from "./Component";

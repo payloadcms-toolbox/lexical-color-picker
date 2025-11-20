@@ -1,9 +1,9 @@
 import {
 	$isTextNode,
 	type LexicalNode,
-} from "@payloadcms/richtext-lexical/lexical";
+} from '@payloadcms/richtext-lexical/lexical';
 
-import { TEXT_COLOR_REGEX } from "./constants";
+import { TEXT_COLOR_REGEX } from './constants';
 
 const BACKGROUND_COLOR_REGEX = /background-color:\s*([^;]+)/i;
 
@@ -28,7 +28,7 @@ export const extractTextColor = (
  * @returns Style string without color property
  */
 export const removeTextColorFromStyle = (style: string): string => {
-	return style.replace(/(?:^|;)\s*color\s*:\s*[^;]+;?\s*/gi, "").trim();
+	return style.replace(/(?:^|;)\s*color\s*:\s*[^;]+;?\s*/gi, '').trim();
 };
 
 /**
@@ -60,9 +60,9 @@ export const extractColorByProperty = (
 	property: string,
 	defaultColor: string,
 ): string => {
-	if (property === "color") {
+	if (property === 'color') {
 		return extractTextColor(style, defaultColor);
-	} else if (property === "background-color") {
+	} else if (property === 'background-color') {
 		return extractBackgroundColor(style, defaultColor);
 	}
 	return defaultColor;
@@ -115,7 +115,7 @@ export const extractBackgroundColor = (
  * @returns Style string without background-color property
  */
 export const removeBackgroundColorFromStyle = (style: string): string => {
-	return style.replace(/background-color:\s*[^;]+;?\s*/g, "").trim();
+	return style.replace(/background-color:\s*[^;]+;?\s*/g, '').trim();
 };
 
 /**
@@ -148,7 +148,7 @@ export const applyTextColorToNodes = (
 	nodes.forEach((node) => {
 		if ($isTextNode(node)) {
 			const currentStyle = node.getStyle();
-			const currentColor = extractTextColor(currentStyle, "");
+			const currentColor = extractTextColor(currentStyle, '');
 
 			// If the same color is already applied, remove the color property
 			if (currentColor.toLowerCase() === color.toLowerCase()) {
@@ -176,7 +176,7 @@ export const applyBackgroundColorToNodes = (
 	nodes.forEach((node) => {
 		if ($isTextNode(node)) {
 			const currentStyle = node.getStyle();
-			const currentColor = extractBackgroundColor(currentStyle, "");
+			const currentColor = extractBackgroundColor(currentStyle, '');
 
 			// If the same color is already applied, remove the background-color property
 			if (currentColor.toLowerCase() === color.toLowerCase()) {

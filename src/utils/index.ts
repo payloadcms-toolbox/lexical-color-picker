@@ -1,2 +1,2 @@
-export * from "./constants";
-export * from "./textColorUtils";
+export * from './constants';
+export * from './textColorUtils';

@@ -7,28 +7,32 @@ import {
 	useDismiss,
 	useFloating,
 	useInteractions,
-} from "@floating-ui/react";
-import type { LexicalNode } from "@payloadcms/richtext-lexical/lexical";
+} from '@floating-ui/react';
+import type { LexicalNode } from '@payloadcms/richtext-lexical/lexical';
 import {
 	$getSelection,
 	$isRangeSelection,
 	COMMAND_PRIORITY_LOW,
 	type LexicalEditor,
 	SELECTION_CHANGE_COMMAND,
-} from "@payloadcms/richtext-lexical/lexical";
-import { useCallback, useEffect, useState } from "react";
-import { type ColorResult, TwitterPicker } from "react-color";
-import { getFirstTextNodeColor } from "../../../utils/textColorUtils";
-import * as styles from "./styles.css";
+} from '@payloadcms/richtext-lexical/lexical';
+import {
+	type PropsWithChildren,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
+import { type ColorResult, TwitterPicker } from 'react-color';
+import { getFirstTextNodeColor } from '../../../utils/textColorUtils';
+import * as styles from './styles.css';
 
 type Props = {
 	editor: LexicalEditor;
 	predefinedColors: string[];
 	defaultColor: string;
 	applyColorFn: (nodes: LexicalNode[], color: string) => void;
-	IconComponent: React.ComponentType;
 	ariaLabel: string;
-	cssProperty: string; // 'color' or 'background-color'
+	cssProperty: string;
 };
 
 export const ColorPickerButton = ({
@@ -36,10 +40,10 @@ export const ColorPickerButton = ({
 	predefinedColors,
 	defaultColor,
 	applyColorFn,
-	IconComponent,
 	ariaLabel,
 	cssProperty,
-}: Props) => {
+	children,
+}: PropsWithChildren<Props>) => {
 	const [currentColor, setCurrentColor] = useState<string>(defaultColor);
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +51,7 @@ export const ColorPickerButton = ({
 		open: isOpen,
 		onOpenChange: setIsOpen,
 		middleware: [offset(8), flip(), shift({ padding: 8 })],
-		placement: "bottom-start",
+		placement: 'bottom-start',
 	});
 
 	const click = useClick(context);
@@ -109,7 +113,6 @@ export const ColorPickerButton = ({
 		},
 		[editor, applyColorFn],
 	);
-
 	const handleColorChange = useCallback(
 		(color: ColorResult) => {
 			const newColor = color.hex;
@@ -128,10 +131,10 @@ export const ColorPickerButton = ({
 				aria-label={ariaLabel}
 				{...getReferenceProps()}
 			>
-				<IconComponent />
+				{children}
 				<span
 					className={styles.colorIndicator}
-					style={{ backgroundColor: currentColor }}
+					style={{ background: currentColor }}
 				/>
 			</button>
 
